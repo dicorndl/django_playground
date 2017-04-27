@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="http://127.0.0.1:8000/files/upload/" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="prefix" value="test_">
+    <input type="file" name="files" multiple>
+    <input type="submit" value="Upload">
+</form>
+</body>
+</html>
