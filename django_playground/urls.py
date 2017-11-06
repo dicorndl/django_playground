@@ -48,10 +48,15 @@ urlpatterns = [
         auth_views.PasswordResetCompleteView.as_view(template_name='accounts/password_reset_complete.html'),
         name='password_reset_complete'),
 
-
     url(r'^files/', include('files.urls', namespace='files')),
     url(r'^photos/', include('photos.urls', namespace='photos')),
 ]
 
+# for development
 if settings.DEBUG:
+    import debug_toolbar
+
+    urlpatterns += [
+        url(r'^__debug__/', include(debug_toolbar.urls)),
+    ]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
