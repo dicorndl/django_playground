@@ -11,6 +11,9 @@
         </div>
         <div class="collapse navbar-collapse" id="main-menu">
             <ul class="nav navbar-nav">
+                <li{% if '/files/' in request.path %} class="active"{% endif %}>
+                    <a href="{% url 'files:upload' %}">Upload_exam</a>
+                </li>
                 <li{% if '/photos/' in request.path %} class="active"{% endif %}>
                     <a href="{% url 'photos:basic_upload' %}">Photos</a>
                 </li>

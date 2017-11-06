@@ -2,39 +2,38 @@ import logging
 import os
 from datetime import datetime
 
-from django.conf import settings
-from django.http import HttpResponse
+from django.core.files.storage import FileSystemStorage
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger(__name__)
 
 
-def form(request):
-    return render(request, 'files/form.html', {})
-
-
 @csrf_exempt
-def upload(request):
-    logger.info('upload called')
+def simple_upload(request):
+    logger.info('simple_upload called')
 
     if request.method == 'POST':
-        prefix = request.POST.get('prefix')
-
-        logger.info(len(request.FILES.getlist('files')))
         upload_list = request.FILES.getlist('files')
 
+        uploaded_file_url = []
         for uploaded in upload_list:
-            logger.info('uploaded')
-            file_name = uploaded._name
+            fs = FileSystemStorage()
+            file_name = fs.save(_rename(uploaded.name), uploaded)
+            uploaded_file_url.append(fs.url(file_name))
 
-            handle_uploaded_file(uploaded, file_name, prefix)
-    return HttpResponse('hello')
+        return render(request, 'files/form.html', {
+            'uploaded_file_url': uploaded_file_url
+        })
+    return render(request, 'files/form.html')
 
 
-def handle_uploaded_file(uploaded, file_name, prefix):
-    extension = file_name.split('.')[-1]
-    rename = '%s%s.%s' % (prefix, datetime.now().strftime('%Y%m%d%H%M%S%f'), extension)
-    with open(os.path.join(settings.MEDIA_ROOT, rename), mode='wb') as fp:
-        for chunk in uploaded.chunks():
-            fp.write(chunk)
+def _rename(file_name):
+    prefix = 'test'
+    name, ext = os.path.splitext(file_name)
+
+    return '{}_{}{}'.format(
+        prefix,
+        datetime.now().strftime('%Y%m%d%H%M%S%f'),
+        ext
+    )

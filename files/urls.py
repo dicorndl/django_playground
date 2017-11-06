@@ -1,8 +1,7 @@
 from django.conf.urls import url
 
-from files.views import upload, form
+from files.views import simple_upload
 
 urlpatterns = [
-    url(r'form/$', form),
-    url(r'upload/$', upload),
+    url(r'upload/$', simple_upload, name='upload'),
 ]

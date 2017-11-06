@@ -1,14 +1,17 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-<form action="http://127.0.0.1:8000/files/upload/" method="post" enctype="multipart/form-data">
-    <input type="hidden" name="prefix" value="test_">
-    <input type="file" name="files" multiple>
-    <input type="submit" value="Upload">
-</form>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block contents %}
+    <form action="{% url 'files:upload' %}" method="post" enctype="multipart/form-data">
+        <input type="file" name="files" multiple>
+        <button type="submit" class="btn btn-primary js-upload-photos">
+            <span class="glyphicon glyphicon-cloud-upload"></span> Upload photos
+        </button>
+    </form>
+
+    {% if uploaded_file_url %}
+        {% for uploaded_file in uploaded_file_url %}
+            <p>File uploaded at : <a href="{{ uploaded_file }}">{{ uploaded_file }}</a></p>
+        {% endfor %}
+
+    {% endif %}
+{% endblock %}

@@ -22,7 +22,7 @@ from django.views.generic import TemplateView
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^$', TemplateView.as_view(template_name='home.html'), name='home'),
-    url(r'^files/', include('files.urls')),
+    url(r'^files/', include('files.urls', namespace='files')),
     url(r'^photos/', include('photos.urls', namespace='photos')),
 ]
 
