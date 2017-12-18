@@ -1,0 +1,11 @@
+{% extends '../base.html' %}
+
+{% block title %}Boards{% endblock %}
+
+{% block contents %}
+    <ol class="breadcrumb my-4">
+        {% block breadcrumb %}
+        {% endblock %}
+    </ol>
+    {% block board_contents %}{% endblock %}
+{% endblock %}
