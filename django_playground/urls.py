@@ -61,6 +61,8 @@ urlpatterns = [
     url(r'^boards/', include('boards.urls', namespace='boards')),
     url(r'^files/', include('files.urls', namespace='files')),
     url(r'^photos/', include('photos.urls', namespace='photos')),
+
+    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
 ]
 
 # for development

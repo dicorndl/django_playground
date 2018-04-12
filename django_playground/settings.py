@@ -48,6 +48,8 @@ INSTALLED_APPS = [
     # 3rd-party apps
     'debug_toolbar',
     'widget_tweaks',
+    'oauth2_provider',
+    'corsheaders',
 ] + [
     # Local apps
     'accounts',
@@ -67,6 +69,7 @@ MIDDLEWARE = [
 ] + [
     # 3rd-party middlewares
     'debug_toolbar.middleware.DebugToolbarMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'django_playground.urls'
@@ -177,3 +180,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
 # Settings for django-debug-toolbar
 INTERNAL_IPS = ('127.0.0.1',)
+
+CORS_ORIGIN_ALLOW_ALL = True
