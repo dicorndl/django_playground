@@ -19,8 +19,36 @@ from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
+import oauth2_provider.views as oauth2_views
 
 from accounts import views as accounts_views
+from boards import views as boards_views
+
+
+# OAuth2 provider endpoints
+oauth2_endpoint_views = [
+    url(r"^authorize/$", oauth2_views.AuthorizationView.as_view(), name="authorize"),
+    url(r"^token/$", oauth2_views.TokenView.as_view(), name="token"),
+    url(r"^revoke_token/$", oauth2_views.RevokeTokenView.as_view(), name="revoke-token"),
+]
+
+if settings.DEBUG:
+    # OAuth2 Application Management endpoints
+    oauth2_endpoint_views += [
+        url(r"^applications/$", oauth2_views.ApplicationList.as_view(), name="list"),
+        url(r"^applications/register/$", oauth2_views.ApplicationRegistration.as_view(), name="register"),
+        url(r"^applications/(?P<pk>[\w-]+)/$", oauth2_views.ApplicationDetail.as_view(), name="detail"),
+        url(r"^applications/(?P<pk>[\w-]+)/delete/$", oauth2_views.ApplicationDelete.as_view(), name="delete"),
+        url(r"^applications/(?P<pk>[\w-]+)/update/$", oauth2_views.ApplicationUpdate.as_view(), name="update"),
+    ]
+
+    # Oauth2 Token management views
+    oauth2_endpoint_views += [
+        url(r"^authorized_tokens/$", oauth2_views.AuthorizedTokensListView.as_view(), name="authorized-token-list"),
+        url(r"^authorized_tokens/(?P<pk>[\w-]+)/delete/$", oauth2_views.AuthorizedTokenDeleteView.as_view(),
+            name="authorized-token-delete"),
+    ]
+
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
@@ -62,7 +90,8 @@ urlpatterns = [
     url(r'^files/', include('files.urls', namespace='files')),
     url(r'^photos/', include('photos.urls', namespace='photos')),
 
-    url(r'^o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+    url(r'^o/', include(oauth2_endpoint_views, namespace='oauth2_provider')),
+    url(r'^api/hello', boards_views.ApiEndpoint.as_view()),
 ]
 
 # for development

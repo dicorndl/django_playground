@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
-from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
 from django.db.models import Count
+from django.http import HttpResponse
 from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse
+from django.utils import timezone
 from django.utils.decorators import method_decorator
 from django.views.generic import UpdateView, ListView
-from django.utils import timezone
+from oauth2_provider.views.generic import ProtectedResourceView
 
 from boards.forms import NewTopicForm, PostForm
 from boards.models import Board, Topic, Post
@@ -127,3 +128,8 @@ class PostUpdateView(UpdateView):
         post.updated_at = timezone.now()
         post.save()
         return redirect('boards:topic_posts', pk=post.topic.board.pk, topic_pk=post.topic.pk)
+
+
+class ApiEndpoint(ProtectedResourceView):
+    def get(self, request, *args, **kwargs):
+        return HttpResponse('Hello, OAuth2!')
