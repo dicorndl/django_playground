@@ -1,5 +1,7 @@
 from django.conf.urls import url
-from boards import views
+
+from . import rest_views
+from . import views
 
 urlpatterns = [
     url('^$', views.BoardListView.as_view(), name='home'),
@@ -9,4 +11,8 @@ urlpatterns = [
     url('^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/reply/$', views.reply_topic, name='reply_topic'),
     url('^(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/edit/$',
         views.PostUpdateView.as_view(), name='edit_post'),
+
+    # REST
+    url('^rest/boards/$', rest_views.board_list, name='rest_boards'),
+    url('^rest/boards/(?P<pk>\d+)/$', rest_views.board_detail, name='rest_boards_detail'),
 ]
