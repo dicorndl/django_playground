@@ -13,6 +13,8 @@ urlpatterns = [
         views.PostUpdateView.as_view(), name='edit_post'),
 
     # REST
-    url('^rest/boards/$', rest_views.board_list, name='rest_boards'),
-    url('^rest/boards/(?P<pk>\d+)/$', rest_views.board_detail, name='rest_boards_detail'),
+    url('^rest/boards/$',
+        rest_views.BoardList.as_view(), name='rest_boards'),
+    url('^rest/boards/(?P<pk>\d+)/$',
+        rest_views.BoardDetail.as_view(), name='rest_boards_detail'),
 ]
