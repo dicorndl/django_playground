@@ -181,4 +181,5 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 # Settings for django-debug-toolbar
 INTERNAL_IPS = ('127.0.0.1',)
 
+# Settings for django Oauth2
 CORS_ORIGIN_ALLOW_ALL = True
