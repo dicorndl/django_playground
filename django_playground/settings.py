@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'oauth2_provider',
     'corsheaders',
+    'rest_framework',
 ] + [
     # Local apps
     'accounts',
