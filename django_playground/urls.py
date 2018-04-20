@@ -86,6 +86,7 @@ urlpatterns = [
         auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'),
         name='password_change_done'),
 
+    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^boards/', include('boards.urls', namespace='boards')),
     url(r'^files/', include('files.urls', namespace='files')),
     url(r'^photos/', include('photos.urls', namespace='photos')),

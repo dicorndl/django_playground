@@ -16,5 +16,5 @@ urlpatterns = [
     url('^rest/boards/$',
         rest_views.BoardList.as_view(), name='rest_boards'),
     url('^rest/boards/(?P<pk>\d+)/$',
-        rest_views.BoardDetail.as_view(), name='rest_boards_detail'),
+        rest_views.TopicList.as_view(), name='rest_board_topics'),
 ]
