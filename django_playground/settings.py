@@ -184,3 +184,9 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 INTERNAL_IPS = ('127.0.0.1',)
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Settings for django REST framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5
+}
