@@ -96,6 +96,11 @@ urlpatterns = [
     url(r'^api/hello', boards_views.ApiEndpoint.as_view()),
 ]
 
+# Add a login view for use with the browsable API
+urlpatterns += [
+    url(r'^api-auth/', include('rest_framework.urls'))
+]
+
 # for development
 if settings.DEBUG:
     import debug_toolbar
