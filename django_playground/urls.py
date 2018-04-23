@@ -90,6 +90,7 @@ urlpatterns = [
     url(r'^boards/', include('boards.urls', namespace='boards')),
     url(r'^files/', include('files.urls', namespace='files')),
     url(r'^photos/', include('photos.urls', namespace='photos')),
+    url(r'^snippets/', include('snippets.urls', namespace='snippets')),
 
     url(r'^o/', include(oauth2_endpoint_views, namespace='oauth2_provider')),
     url(r'^api/hello', boards_views.ApiEndpoint.as_view()),
