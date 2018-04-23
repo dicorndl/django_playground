@@ -50,12 +50,14 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'oauth2_provider',
     'corsheaders',
+    'rest_framework',
 ] + [
     # Local apps
     'accounts',
     'boards',
     'files',
     'photos',
+    'snippets',
 ]
 
 MIDDLEWARE = [
@@ -183,3 +185,9 @@ INTERNAL_IPS = ('127.0.0.1',)
 
 # Settings for django Oauth2
 CORS_ORIGIN_ALLOW_ALL = True
+
+# Settings for django REST framework
+REST_FRAMEWORK = {
+    'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    'PAGE_SIZE': 5
+}

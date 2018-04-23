@@ -86,12 +86,19 @@ urlpatterns = [
         auth_views.PasswordChangeDoneView.as_view(template_name='accounts/password_change_done.html'),
         name='password_change_done'),
 
+    url(r'^accounts/', include('accounts.urls', namespace='accounts')),
     url(r'^boards/', include('boards.urls', namespace='boards')),
     url(r'^files/', include('files.urls', namespace='files')),
     url(r'^photos/', include('photos.urls', namespace='photos')),
+    url(r'^snippets/', include('snippets.urls', namespace='snippets')),
 
     url(r'^o/', include(oauth2_endpoint_views, namespace='oauth2_provider')),
     url(r'^api/hello', boards_views.ApiEndpoint.as_view()),
+]
+
+# Add a login view for use with the browsable API
+urlpatterns += [
+    url(r'^api-auth/', include('rest_framework.urls'))
 ]
 
 # for development
