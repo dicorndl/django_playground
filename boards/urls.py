@@ -17,4 +17,6 @@ urlpatterns = [
         rest_views.BoardList.as_view(), name='rest_boards'),
     url('^rest/boards/(?P<pk>\d+)/$',
         rest_views.TopicList.as_view(), name='rest_board_topics'),
+    url(r'^rest/boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)',
+        rest_views.PostList.as_view(), name='rest_topic_posts'),
 ]
