@@ -26,6 +26,7 @@ class TopicList(generics.ListCreateAPIView):
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
 
     def get_queryset(self):
         board_pk = self.kwargs['pk']
@@ -33,3 +34,11 @@ class PostList(generics.ListCreateAPIView):
         topic = Topic.objects.get(board__pk=board_pk,
                                   pk=topic_pk)
         return topic.posts.order_by('created_at')
+
+    def perform_create(self, serializer):
+        board_pk = self.kwargs['pk']
+        topic_pk = self.kwargs['topic_pk']
+        topic = Topic.objects.get(board__pk=board_pk,
+                                  pk=topic_pk)
+        serializer.save(created_by=self.request.user,
+                        topic=topic)
