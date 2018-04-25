@@ -12,11 +12,13 @@ class BoardSerializer(serializers.ModelSerializer):
 class PostSerializer(serializers.ModelSerializer):
     updated_at = serializers.ReadOnlyField()
     created_by = serializers.ReadOnlyField(source='created_by.id')
+    updated_by = serializers.ReadOnlyField(source='updated_by.id')
     topic = serializers.ReadOnlyField(source='topic.id')
 
     class Meta:
         model = Post
-        fields = ('message', 'topic', 'created_at', 'updated_at', 'created_by')
+        fields = ('message', 'topic', 'created_at', 'updated_at', 'created_by',
+                  'updated_by')
 
 
 class TopicSerializer(serializers.ModelSerializer):
