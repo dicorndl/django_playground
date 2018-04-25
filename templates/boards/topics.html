@@ -43,7 +43,7 @@
                     </small>
                 </td>
                 <td>{{ topic.starter.username }}</td>
-                <td>{{ topic.replies }}</td>
+                <td>{% if topic.replies < 0 %}0{% else %}{{ topic.replies }}{% endif %}</td>
                 <td>{{ topic.views }}</td>
                 <td>{{ topic.last_updated|naturaltime }}</td>
             </tr>
