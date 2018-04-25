@@ -22,6 +22,11 @@ class TopicList(generics.ListCreateAPIView):
     def perform_create(self, serializer):
         serializer.save(starter=self.request.user)
 
+    def get_queryset(self):
+        board_pk = self.kwargs['pk']
+        board = Board.objects.get(pk=board_pk)
+        return board.topics.order_by('-last_updated')
+
 
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
