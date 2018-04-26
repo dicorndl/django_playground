@@ -2,7 +2,7 @@ from django.utils import timezone
 from rest_framework import generics, permissions
 
 from boards.models import Board, Topic, Post
-from boards.serializers import BoardSerializer, TopicSerializer, PostSerializer
+from rest_boards.serializers import BoardSerializer, TopicSerializer, PostSerializer
 
 
 class BoardList(generics.ListCreateAPIView):

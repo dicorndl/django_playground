@@ -92,6 +92,9 @@ urlpatterns = [
     url(r'^photos/', include('photos.urls', namespace='photos')),
     url(r'^snippets/', include('snippets.urls', namespace='snippets')),
 
+    # REST board
+    url(r'^api/', include('rest_boards.urls', namespace='rest_board')),
+
     url(r'^o/', include(oauth2_endpoint_views, namespace='oauth2_provider')),
     url(r'^api/hello', boards_views.ApiEndpoint.as_view()),
 ]

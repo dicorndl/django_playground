@@ -58,6 +58,7 @@ INSTALLED_APPS = [
     'files',
     'photos',
     'snippets',
+    'rest_boards',
 ]
 
 MIDDLEWARE = [

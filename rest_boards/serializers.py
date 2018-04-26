@@ -2,7 +2,7 @@ from rest_framework import serializers
 from rest_framework_nested.serializers import NestedHyperlinkedModelSerializer
 from rest_framework_nested.relations import NestedHyperlinkedIdentityField
 
-from .models import Board, Topic, Post
+from boards.models import Board, Topic, Post
 
 
 class BoardSerializer(serializers.HyperlinkedModelSerializer):
@@ -19,7 +19,7 @@ class BoardSerializer(serializers.HyperlinkedModelSerializer):
         model = Board
         fields = ('name', 'description', 'post_count', 'topic_count', 'url')
         extra_kwargs = {
-            'url': {'view_name': 'boards:rest_board_detail'}
+            'url': {'view_name': 'rest_board:rest_board_detail'}
         }
 
 
@@ -31,7 +31,7 @@ class PostSerializer(NestedHyperlinkedModelSerializer):
     updated_at = serializers.ReadOnlyField()
     created_by = serializers.ReadOnlyField(source='created_by.id')
     updated_by = serializers.ReadOnlyField(source='updated_by.id')
-    topic = NestedHyperlinkedIdentityField(view_name='boards:rest_topic_detail',
+    topic = NestedHyperlinkedIdentityField(view_name='rest_board:rest_topic_detail',
                                            parent_lookup_kwargs={
                                                'pk': 'topic__board__id',
                                                'topic_pk': 'topic__id'
@@ -42,7 +42,7 @@ class PostSerializer(NestedHyperlinkedModelSerializer):
         fields = ('message', 'created_at', 'updated_at', 'created_by',
                   'updated_by', 'topic', 'url')
         extra_kwargs = {
-            'url': {'view_name': 'boards:rest_post_detail',
+            'url': {'view_name': 'rest_board:rest_post_detail',
                     'lookup_url_kwarg': 'post_pk'}
         }
 
@@ -53,7 +53,7 @@ class TopicSerializer(NestedHyperlinkedModelSerializer):
     }
 
     starter = serializers.ReadOnlyField(source='starter.id')
-    board = NestedHyperlinkedIdentityField(view_name='boards:rest_board_detail',
+    board = NestedHyperlinkedIdentityField(view_name='rest_board:rest_board_detail',
                                            parent_lookup_kwargs={'pk': 'board__id'})
     views = serializers.ReadOnlyField()
     post_count = serializers.SerializerMethodField()
@@ -78,6 +78,6 @@ class TopicSerializer(NestedHyperlinkedModelSerializer):
         fields = ('subject', 'starter', 'post_count', 'views', 'posts',
                   'last_updated', 'board', 'url')
         extra_kwargs = {
-            'url': {'view_name': 'boards:rest_topic_detail',
+            'url': {'view_name': 'rest_board:rest_topic_detail',
                     'lookup_url_kwarg': 'topic_pk'}
         }
