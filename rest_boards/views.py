@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from django.utils import timezone
 from rest_framework import generics, permissions
 
@@ -22,12 +23,12 @@ class TopicList(generics.ListCreateAPIView):
 
     def get_queryset(self):
         board_pk = self.kwargs['pk']
-        board = Board.objects.get(pk=board_pk)
+        board = get_object_or_404(Board, pk=board_pk)
         return board.topics.order_by('-last_updated')
 
     def perform_create(self, serializer):
         board_pk = self.kwargs['pk']
-        board = Board.objects.get(pk=board_pk)
+        board = get_object_or_404(Board, pk=board_pk)
         serializer.save(starter=self.request.user,
                         board=board)
 
@@ -40,7 +41,7 @@ class TopicDetail(generics.RetrieveAPIView):
 
     def get_queryset(self):
         board_pk = self.kwargs['pk']
-        board = Board.objects.get(pk=board_pk)
+        board = get_object_or_404(Board, pk=board_pk)
         return board.topics.all()
 
 
@@ -52,15 +53,13 @@ class PostList(generics.ListCreateAPIView):
     def get_queryset(self):
         board_pk = self.kwargs['pk']
         topic_pk = self.kwargs['topic_pk']
-        topic = Topic.objects.get(board__pk=board_pk,
-                                  pk=topic_pk)
+        topic = get_object_or_404(Topic, board_pk=board_pk, pk=topic_pk)
         return topic.posts.order_by('created_at')
 
     def perform_create(self, serializer):
         board_pk = self.kwargs['pk']
         topic_pk = self.kwargs['topic_pk']
-        topic = Topic.objects.get(board__pk=board_pk,
-                                  pk=topic_pk)
+        topic = get_object_or_404(Topic, board_pk=board_pk, pk=topic_pk)
         serializer.save(created_by=self.request.user,
                         topic=topic)
 
@@ -74,8 +73,7 @@ class PostDetail(generics.RetrieveUpdateAPIView):
     def get_queryset(self):
         board_pk = self.kwargs['pk']
         topic_pk = self.kwargs['topic_pk']
-        topic = Topic.objects.get(board__pk=board_pk,
-                                  pk=topic_pk)
+        topic = get_object_or_404(Topic, board_pk=board_pk, pk=topic_pk)
         return topic.posts.all()
 
     def perform_update(self, serializer):
