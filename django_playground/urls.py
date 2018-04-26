@@ -13,17 +13,16 @@ Including another URLconf
     1. Import the include() function: from django.conf.urls import url, include
     2. Add a URL to urlpatterns:  url(r'^blog/', include('blog.urls'))
 """
+import oauth2_provider.views as oauth2_views
 from django.conf import settings
 from django.conf.urls import url, include
 from django.conf.urls.static import static
 from django.contrib import admin
 from django.contrib.auth import views as auth_views
 from django.views.generic import TemplateView
-import oauth2_provider.views as oauth2_views
 
 from accounts import views as accounts_views
 from boards import views as boards_views
-
 
 # OAuth2 provider endpoints
 oauth2_endpoint_views = [
@@ -94,6 +93,9 @@ urlpatterns = [
 
     # REST board
     url(r'^api/', include('rest_boards.urls', namespace='rest_board')),
+    url(r'^rest-board/$',
+        TemplateView.as_view(template_name='rest_boards/home.html'),
+        name='rest_board_home'),
 
     url(r'^o/', include(oauth2_endpoint_views, namespace='oauth2_provider')),
     url(r'^api/hello', boards_views.ApiEndpoint.as_view()),

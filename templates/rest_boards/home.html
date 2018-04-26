@@ -1,0 +1,128 @@
+{% extends '../base.html' %}
+
+{% block title %}REST boards{% endblock %}
+
+{% block contents %}
+<div id="starting">
+    <div class="row">
+        <h1>List of Board</h1>
+        <button class="btn btn-primary" data-toggle="modal" data-target="#addBoardModal">ADD BOARD</button>
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Board</th>
+                <th>Posts</th>
+                <th>Topics</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr v-for="board in boards">
+                <td>
+                    <a :href="board.url">${board.name}</a>
+                    <small class="text-muted d-block">${board.description}</small>
+                </td>
+                <td>${board.post_count}</td>
+                <td>${board.topic_count}</td>
+            </tr>
+            </tbody>
+        </table>
+
+        {# Add board Modal #}
+        <div class="modal fade" id="addBoardModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLongTitle">ADD BOARD</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <form @submit.prevent="addBoard()">
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label for="board_name">Name</label>
+                                <input
+                                    type="text"
+                                    class="form-control"
+                                    id="board_name"
+                                    placeholder="Enter Board Name"
+                                    v-model="newBoard.name"
+                                    required="required">
+                            </div>
+                            <div class="form-group">
+                                <label for="board_desc">Description</label>
+                                <textarea
+                                    class="form-control"
+                                    id="board_desc"
+                                    placeholder="Enter Board Description"
+                                    v-model="newBoard.description"
+                                    required="required"
+                                    rows="3"></textarea>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="loading" v-if="loading===true">Loading&#8230;</div>
+        </div>
+    </div>
+    <div class="loading" v-if="loading===true">Loading&#8230;</div>
+</div>
+{% endblock %}
+
+{% block javascript %}
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+    {# HTTP client for vue.js #}
+    <script src="https://cdn.jsdelivr.net/npm/vue-resource@1.5.0/dist/vue-resource.min.js"></script>
+    <script type="text/javascript">
+        new Vue({
+            el: "#starting",
+            delimiters: ["${", "}"],
+            data: {
+                boards: [],
+                loading: false,
+                currentArticle: {},
+                message: null,
+                newBoard: {"name": null, "description": null},
+            },
+            mounted: function() {
+                this.getBoards();
+            },
+            methods: {
+                getBoards: function() {
+                    this.loading = true;
+                    this.$http.get("{% url 'rest_board:boards' %}")
+                        .then((response) => {
+                            console.log(response.data);
+                            this.boards = response.data.results;
+                            this.loading = false;
+                        })
+                        .catch((err) => {
+                            this.loading = false;
+                            console.log(err);
+                        })
+                },
+                addBoard: function() {
+                    this.loading = true;
+                    let header = {
+                        "X-CSRFToken": "{{ csrf_token }}"
+                    };
+                    this.$http.post("{% url 'rest_board:boards' %}", this.newBoard, {headers: header})
+                        .then((response) => {
+                            this.loading = false;
+                            $("#addBoardModal").modal("hide");
+                            this.getBoards();
+                        })
+                        .catch((err) => {
+                            this.loading = false;
+                            console.log(err);
+                        })
+                }
+            }
+        });
+    </script>
+{% endblock %}
