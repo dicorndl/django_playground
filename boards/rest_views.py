@@ -26,7 +26,10 @@ class TopicList(generics.ListCreateAPIView):
         return board.topics.order_by('-last_updated')
 
     def perform_create(self, serializer):
-        serializer.save(starter=self.request.user)
+        board_pk = self.kwargs['pk']
+        board = Board.objects.get(pk=board_pk)
+        serializer.save(starter=self.request.user,
+                        board=board)
 
 
 class TopicDetail(generics.RetrieveAPIView):

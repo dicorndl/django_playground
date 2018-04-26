@@ -48,6 +48,7 @@ class TopicSerializer(NestedHyperlinkedModelSerializer):
     posts = PostSerializer(write_only=True)
 
     def create(self, validated_data):
+        print(validated_data)
         posts = validated_data.pop('posts')
         topic = Topic.objects.create(**validated_data)
         Post.objects.create(
