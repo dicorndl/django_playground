@@ -3,10 +3,26 @@ from rest_framework import serializers
 from .models import Board, Topic, Post
 
 
-class BoardSerializer(serializers.ModelSerializer):
+class BoardSerializer(serializers.HyperlinkedModelSerializer):
+    post_count = serializers.SerializerMethodField()
+    topic_count = serializers.SerializerMethodField()
+
+    def get_post_count(self, obj):
+        return obj.get_posts_count()
+
+    def get_topic_count(self, obj):
+        return obj.topics.count()
+
     class Meta:
         model = Board
-        fields = ('id', 'name', 'description')
+        fields = ('name',
+                  'description',
+                  'post_count',
+                  'topic_count',
+                  'url')
+        extra_kwargs = {
+            'url': {'view_name': 'boards:rest_board_detail'}
+        }
 
 
 class PostSerializer(serializers.ModelSerializer):

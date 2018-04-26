@@ -15,8 +15,10 @@ urlpatterns = [
     # REST
     url('^rest/boards/$',
         rest_views.BoardList.as_view(), name='rest_boards'),
-    url('^rest/boards/(?P<pk>\d+)/$',
-        rest_views.TopicList.as_view(), name='rest_board_topics'),
+    url(r'^rest/boards/(?P<pk>\d+)/$',
+        rest_views.BoardDetail.as_view(), name='rest_board_detail'),
+    url('^rest/boards/(?P<pk>\d+)/topics/$',
+        rest_views.TopicList.as_view(), name='rest_topics'),
     url(r'^rest/boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/$',
         rest_views.PostList.as_view(), name='rest_topic_posts'),
     url(r'^rest/boards/(?P<pk>\d+)/topics/(?P<topic_pk>\d+)/posts/(?P<post_pk>\d+)/$',
