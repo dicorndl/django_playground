@@ -23,16 +23,28 @@ class BoardSerializer(serializers.HyperlinkedModelSerializer):
         }
 
 
-class PostSerializer(serializers.ModelSerializer):
+class PostSerializer(NestedHyperlinkedModelSerializer):
+    parent_lookup_kwargs = {
+        'pk': 'topic__board__id',
+        'topic_pk': 'topic__id'
+    }
     updated_at = serializers.ReadOnlyField()
     created_by = serializers.ReadOnlyField(source='created_by.id')
     updated_by = serializers.ReadOnlyField(source='updated_by.id')
-    topic = serializers.ReadOnlyField(source='topic.id')
+    topic = NestedHyperlinkedIdentityField(view_name='boards:rest_topic_detail',
+                                           parent_lookup_kwargs={
+                                               'pk': 'topic__board__id',
+                                               'topic_pk': 'topic__id'
+                                           })
 
     class Meta:
         model = Post
-        fields = ('message', 'topic', 'created_at', 'updated_at', 'created_by',
-                  'updated_by')
+        fields = ('message', 'created_at', 'updated_at', 'created_by',
+                  'updated_by', 'topic', 'url')
+        extra_kwargs = {
+            'url': {'view_name': 'boards:rest_post_detail',
+                    'lookup_url_kwarg': 'post_pk'}
+        }
 
 
 class TopicSerializer(NestedHyperlinkedModelSerializer):
