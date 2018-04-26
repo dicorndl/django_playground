@@ -29,6 +29,18 @@ class TopicList(generics.ListCreateAPIView):
         serializer.save(starter=self.request.user)
 
 
+class TopicDetail(generics.RetrieveAPIView):
+    serializer_class = TopicSerializer
+    lookup_field = 'id'
+    lookup_url_kwarg = 'topic_pk'
+    permission_classes = (permissions.IsAuthenticatedOrReadOnly,)
+
+    def get_queryset(self):
+        board_pk = self.kwargs['pk']
+        board = Board.objects.get(pk=board_pk)
+        return board.topics.all()
+
+
 class PostList(generics.ListCreateAPIView):
     queryset = Post.objects.all()
     serializer_class = PostSerializer
